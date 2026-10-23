@@ -1,0 +1,44 @@
+name = "Grumman AA-5B Tiger"
+icao = "AA5"
+seats = 4
+engine = "Avco Lycoming O-360-A4K"
+
+[brake_horsepower]
+value = 180
+units = "bhp"
+
+[wing_area]
+value = 140
+units = "ft^2"
+
+[vs0]
+value = 53
+units = "KCAS"
+
+[vs1]
+value = 56
+units = "KCAS"
+
+[maximum_gross_weight]
+value = 2400
+units = "lbs"
+
+[maximum_useful_load]
+value = 937
+units = "lbs"
+
+[maximum_usable_fuel]
+value = 51
+units = "gal"
+
+[takeoff_ground_roll_distance]
+model = "log-linear"
+coefficients = {constant = 1.79363551, gross_weight = 0.00047511, density_altitude = 0.00003228}
+
+[takeoff_clear_50ft_distance]
+model = "log-linear"
+coefficients = {constant = 2.08861732, gross_weight = 0.00045766, density_altitude = 0.00003122}
+
+[rate_of_climb]
+model = "linear"
+coefficients = {constant = 2411.36159857, gross_weight = -0.64197917, density_altitude = -0.05491743}

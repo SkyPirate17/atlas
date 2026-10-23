@@ -1,0 +1,19 @@
+name = "Inyokern Airport"
+iata = "IYK"
+icao = "KIYK"
+faa_lid = "IYK"
+
+latitude = 35.6587413
+longitude = -117.8295325
+elevation = 2457
+
+runways = [
+    {name = "Runway 15", surface = "asphalt", length = 7100, width = 75, displaced = false, obstacle = false},
+    {name = "Runway 33", surface = "asphalt", length = 7100, width = 75, displaced = false, obstacle = false},
+    {name = "Runway 2", surface = "asphalt", length = 6275, width = 75, displaced = false, obstacle = false},
+    {name = "Runway 20", surface = "asphalt", length = 6275, width = 75, displaced = 320, obstacle = false},
+    {name = "Runway 10", surface = "asphalt", length = 4150, width = 75, displaced = false, obstacle = false},
+    {name = "Runway 28", surface = "asphalt", length = 4150, width = 75, displaced = 103, obstacle = false},
+]
+
+default_runway = "Runway 33"

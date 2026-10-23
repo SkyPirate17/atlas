@@ -1,0 +1,44 @@
+name = "Cessna 150M"
+icao = "C150"
+seats = 2
+engine = "Continental O-200-A"
+
+[brake_horsepower]
+value = 100
+units = "bhp"
+
+[wing_area]
+value = 160
+units = "ft^2"
+
+[vs0]
+value = 42
+units = "KCAS"
+
+[vs1]
+value = 48
+units = "KCAS"
+
+[maximum_gross_weight]
+value = 1600
+units = "lbs"
+
+[maximum_useful_load]
+value = 491
+units = "lbs"
+
+[maximum_usable_fuel]
+value = 22.5
+units = "gal"
+
+[takeoff_ground_roll_distance]
+model = "log-linear"
+coefficients = {constant = 1.93846362, gross_weight = 0.00057992, density_altitude = 0.00003291}
+
+[takeoff_clear_50ft_distance]
+model = "log-linear"
+coefficients = {constant = 2.21064800, gross_weight = 0.00057992, density_altitude = 0.00003502}
+
+[rate_of_climb]
+model = "linear"
+coefficients = {constant = 1154.49801884, gross_weight = -0.31257143, density_altitude = -0.03807124}

@@ -1,0 +1,31 @@
+name = "Example"
+
+[weight_and_balance]
+items = [
+    {name = "BEW"},
+    {name = "Reserve Fuel"},
+    {name = "Pilot", weight = 215},
+    {name = "Mission Fuel"},
+    {name = "Passenger", weight = 215},
+    {name = "Luggage", weight = 50},
+]
+
+[start]
+
+
+[takeoff]
+airport = "KIYK"
+
+[climb]
+
+[cruise]
+distance = 780
+
+[loiter]
+time = 00:00
+
+[reserve]
+time = 00:30
+
+[landing]
+airport = "KRNT"

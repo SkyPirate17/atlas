@@ -1,0 +1,44 @@
+name = "Grumman AA-5A Cheetah"
+icao = "AA5"
+seats = 4
+engine = "Avco Lycoming O-320-E2G"
+
+[brake_horsepower]
+value = 150
+units = "bhp"
+
+[wing_area]
+value = 140
+units = "ft^2"
+
+[vs0]
+value = 53
+units = "KCAS"
+
+[vs1]
+value = 55
+units = "KCAS"
+
+[maximum_gross_weight]
+value = 2200
+units = "lbs"
+
+[maximum_useful_load]
+value = 799
+units = "lbs"
+
+[maximum_usable_fuel]
+value = 51
+units = "gal"
+
+[takeoff_ground_roll_distance]
+model = "log-linear"
+coefficients = {constant = 1.78995395, gross_weight = 0.00052352, density_altitude = 0.00003226}
+
+[takeoff_clear_50ft_distance]
+model = "log-linear"
+coefficients = {constant = 2.09358707, gross_weight = 0.00050341, density_altitude = 0.00003120}
+
+[rate_of_climb]
+model = "linear"
+coefficients = {constant = 2203.21524174, gross_weight = -0.69375000, density_altitude = -0.04481542}

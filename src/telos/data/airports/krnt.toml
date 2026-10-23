@@ -1,0 +1,15 @@
+name = "Renton Municipal Airport"
+iata = "RNT"
+icao = "KRNT"
+faa_lid = "RNT"
+
+latitude = 47.4931389
+longitude = -122.2157500
+elevation = 32
+
+runways = [
+    {name = "Runway 16", surface = "asphalt", length = 5382, width = 200, displaced = 304, obstacle = 10000},
+    {name = "Runway 34", surface = "asphalt", length = 5382, width = 200, displaced = 340, obstacle = 200},
+]
+
+default_runway = "Runway 34"
