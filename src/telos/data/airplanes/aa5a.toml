@@ -19,6 +19,14 @@ units = "KCAS"
 value = 55
 units = "KCAS"
 
+[vx]
+value = "68"
+units = "KIAS"
+
+[vy]
+value = "79"
+units = "KIAS"
+
 [maximum_gross_weight]
 value = 2200
 units = "lbs"
