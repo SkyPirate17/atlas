@@ -1,6 +1,22 @@
 import numpy as np
 from dataclasses import dataclass
 
+def takeoff():
+
+    return None
+
+def climb():
+
+    return None
+
+def cruise():
+
+    return None
+
+def landing():
+
+    return None
+
 @dataclass
 class Performance:
     
