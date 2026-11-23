@@ -2,65 +2,162 @@ import telos
 import argparse
 import math
 import tomllib
+import datetime as dt
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from pathlib import Path
 from importlib.resources import files
 
+def startup():
+
+    case = {
+        "airplanes": [
+            Path(r"D:\Users\jgros\Documents\GitHub\atlas\src\telos\data\airplanes\c152.toml"), 
+            Path(r"D:\Users\jgros\Documents\GitHub\atlas\src\telos\data\airplanes\aa5a.toml"),
+            Path(r"D:\Users\jgros\Documents\GitHub\atlas\src\telos\data\airplanes\aa5b.toml")
+        ]
+    }
+
+    columns = [
+        "Airplane",
+        "Mission",
+        "Maximum BHP",
+        "Maximum RPM",
+        "Minimum RPM",
+        "BSFC",
+        "FF",
+        "Time",
+        "Fuel",
+        "Distance",
+    ]
+
+    units = {
+        "Airplane": "None",
+        "Mission": "None",
+        "Maximum BHP": "bhp",
+        "Maximum RPM": "rpm",
+        "Minimum RPM": "rpm",
+        "BSFC": "lb/hp-hr",
+        "FF": "gph",
+        "Time": "hh:mm",
+        "Fuel": "gal",
+        "Distance": "nmi",
+    }
+
+    rows = [units]
+
+    for i in case["airplanes"]:
+
+        with open(i, "rb") as f:
+            airplane = tomllib.load(f)
+
+        name = airplane["name"]
+        maximum_bhp = airplane["maximum_bhp"]["value"]
+        maximum_rpm = airplane["maximum_rpm"]["value"]
+        minimum_rpm = airplane["minimum_rpm"]["value"]
+        bsfc = airplane["bsfc"]["value"]
+        ff = bsfc * maximum_bhp * (minimum_rpm / maximum_rpm) * (1 / 6) # 1/6 converts PPH to GPH
+        time = dt.timedelta(hours=0, minutes=15)
+        fuel = ff * (time.total_seconds() / 3600) # second term converts time to hours
+        dist = 0 # distance is inherently zero
+
+        ff = round(ff, 1)
+        fuel = round(fuel, 1)
+        dist = round(dist, 0)
+
+        data = {
+            "Airplane": name,
+            "Mission": "IYK-CHD (Std.)",
+            "Maximum BHP": maximum_bhp,
+            "Maximum RPM": maximum_rpm,
+            "Minimum RPM": minimum_rpm,
+            "BSFC": bsfc,
+            "FF": ff,
+            "Time": "00:15",
+            "Fuel": fuel,
+            "Distance": dist,
+        }
+
+        rows.append(data)
+
+    df = pd.DataFrame(rows, columns=columns)
+
+    return df
+
+def climb():
+
+    df = pd.DataFrame()
+
+    return df
+
+def cruise():
+
+    df = pd.DataFrame()
+
+    return df
+
+def loiter():
+
+    df = pd.DataFrame()
+
+    return df
+
+def reserve():
+
+    df = pd.DataFrame()
+
+    return df
+
+def shutdown():
+
+    df = pd.DataFrame()
+
+    return df
+
 def main():
 
-    # Command line arguments.
-    parser = argparse.ArgumentParser(description=f"{telos.__title__} {telos.__version__}", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    
-    # parser.add_argument("-i", "--input", type=str, required=True, help="input file")
-    # parser.add_argument("-o", "--output", type=str, required=True, help="output file")
+    try:
 
-    parser.add_argument("--case", type=Path, required=True, help="specifies the input case file (.toml)")
+        # Command line arguments.
+        parser = argparse.ArgumentParser(description=f"{telos.__title__} {telos.__version__}", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        
+        parser.add_argument("-i", "--input", type=Path, required=True, help="specifies the input file")
+        parser.add_argument("-o", "--output", type=Path, required=True, help="specifies the output Excel workbook (.xlsx)")
+        # parser.add_argument("--case", type=Path, required=True, help="specifies the input case file (.toml)")
 
-    args = parser.parse_args()
+        args = parser.parse_args()
 
-    # Open the case file.
-    # with open(args.case, "rb") as f:
-    #     case = tomllib.load(f)
+        # Open the case file.
+        # with open(args.case, "rb") as f:
+        #     case = tomllib.load(f)
 
-    h = range(0, 10000, 100)
+        df_startup = startup()
+        df_climb = climb()
+        df_cruise = cruise()
+        df_loiter = loiter()
+        df_reserve = reserve()
+        df_shutdown = shutdown()
 
-    # cols = pd.MultiIndex.from_tuples([
-    #     ("Takeoff", "Ground Roll Distance (ft)"),
-    #     ("Takeoff", "Clear 50ft Distance (ft)"),
-    #     ("Climb", "Airspeed (KTAS)"),
-    #     ("Climb", "Fuel Flow (gph)"),
-    #     ("Climb", "Rate of Climb (fpm)"),
-    #     ("Climb", "Time to Climb (min)"),
-    #     ("Climb", "Distance to Climb (NM)"),
-    #     ("Climb", "Fuel to Climb (gal)"),
-    #     ("Cruise", "Airspeed (KTAS)"),
-    #     ("Cruise", "Fuel Flow (gph)"),
-    # ])
+        df_dict = {
+            "Startup, Taxi, Run-Up": df_startup,
+            "Climb": df_climb,
+            "Cruise": df_cruise,
+            "Loiter": df_loiter,
+            "Reserve": df_reserve,
+            "Taxi, Shutdown": df_shutdown,
+        }
 
-    cols = pd.MultiIndex.from_tuples([
-        ("Takeoff", None),
-        ("Climb", None),
-        ("Cruise", None),
-    ])
+    except Exception as e:
+        print(e)
 
-    df = pd.DataFrame(index=h, columns=cols)
+    else:
+        with pd.ExcelWriter(args.output, engine="openpyxl") as writer:
+            for key, df in df_dict.items():
+                df.to_excel(writer, sheet_name=key, index=False)
 
-    df[("Takeoff", "Ground Roll Distance (ft)")] = 0
-
-    print(df)
-
-    print(df[("Climb")])
-
-    # print(df[("Climb", "Rate of Climb (fpm)")])
-
-    df.to_csv(args.case.with_name("debug.csv"))
-
-    path = args.case.with_name("test.xlsx")
-
-    with pd.ExcelWriter(path, engine="openpyxl") as writer:
-        df.to_excel(writer, sheet_name="Grumman AA-5B Tiger")
+    finally:
+        print("Complete!")
 
     # # Iterate over airplanes in the case file.
     # for i in case["airplanes"]:

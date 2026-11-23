@@ -1,0 +1,37 @@
+# Some notes:
+# 1. The name will appear in the final workbook.
+# 2. All ETE values are formatted as HH:MM.
+# 3. The climb segment is not listed here as no additional information is needed, but rest assured,
+#    climb is computed. The takeoff and cruise density altitudes are used to find time, distance, 
+#    and fuel to climb. The distance to climb is subtracted from the total mission distance.
+# 4. QNH and OAT are used to compute the density altitude for each segment.
+
+name = "IYK-CHD (Std.)"
+
+[startup]
+ete = "00:15"
+
+[takeoff]
+airport = "KIYK"
+qnh = {value = 29.92, units = "inHg"}
+oat = {value = 15, units = "°C"}
+
+[cruise]
+true_altitude = {value = 9500, units = "ft MSL"}
+qnh = {value = 29.92, units = "inHg"}
+oat = {value = 0, units = "°C"}
+distance = {value = 390, units = "NM"}
+
+[loiter]
+ete = "00:00"
+
+[reserve]
+ete = "01:00"
+
+[landing]
+airport = "KCHD"
+qnh = {value = 29.92, units = "inHg"}
+oat = {value = 20, units = "°C"}
+
+[shutdown]
+ete = "00:05"

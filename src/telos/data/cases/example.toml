@@ -1,6 +1,22 @@
+# Name of the case as it will appear in the output file
 name = "Example"
 
+# Which airplanes should be evaluated
 airplanes = [
-    "aa5a",
     "c150m",
+]
+
+missions = [
+    "kiyk-kchd",
+]
+
+# Weight and balance info
+[weight_and_balance]
+items = [
+    {name = "BEW"},
+    {name = "Reserve Fuel"},
+    {name = "Pilot", weight = 215, units = "lbs"},
+    {name = "Mission Fuel"},
+    {name = "Passenger", weight = 215, units = "lbs"},
+    {name = "Luggage", weight = 50, units = "lbs"},
 ]

@@ -3,9 +3,21 @@ icao = "C152"
 seats = 2
 engine = "Lycoming O-235-L2C"
 
-[brake_horsepower]
+[maximum_bhp]
 value = 110
 units = "bhp"
+
+[maximum_rpm]
+value = 2550
+units = "rpm"
+
+[minimum_rpm]
+value = 1000
+units = "rpm"
+
+[bsfc]
+value = 0.45
+units = "lbs/hp-hr"
 
 [wing_area]
 value = 159.5
@@ -42,11 +54,14 @@ units = "gal"
 [takeoff_ground_roll_distance]
 model = "log-linear"
 coefficients = {constant = 1.91174149, gross_weight = 0.00056732, density_altitude = 0.00003336}
+units = {constant = "", gross_weight = "lbs", density_altitude = "ft"}
 
 [takeoff_clear_50ft_distance]
 model = "log-linear"
 coefficients = {constant = 2.17182421, gross_weight = 0.00056732, density_altitude = 0.00003732}
+units = {constant = "", gross_weight = "lbs", density_altitude = "ft"}
 
 [rate_of_climb]
 model = "linear"
 coefficients = {constant = 1243.48262172, gross_weight = -0.31875000, density_altitude = -0.03885973}
+units = {constant = "", gross_weight = "lbs", density_altitude = "ft"}
