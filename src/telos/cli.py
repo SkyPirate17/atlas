@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 from pathlib import Path
 from importlib.resources import files
 
-def startup():
+def startup(args: argparse.Namespace):
 
     case = {
         "airplanes": [
@@ -85,31 +85,31 @@ def startup():
 
     return df
 
-def climb():
+def climb(args: argparse.Namespace):
 
     df = pd.DataFrame()
 
     return df
 
-def cruise():
+def cruise(args: argparse.Namespace):
 
     df = pd.DataFrame()
 
     return df
 
-def loiter():
+def loiter(args: argparse.Namespace):
 
     df = pd.DataFrame()
 
     return df
 
-def reserve():
+def reserve(args: argparse.Namespace):
 
     df = pd.DataFrame()
 
     return df
 
-def shutdown():
+def shutdown(args: argparse.Namespace):
 
     df = pd.DataFrame()
 
@@ -128,16 +128,12 @@ def main():
 
         args = parser.parse_args()
 
-        # Open the case file.
-        # with open(args.case, "rb") as f:
-        #     case = tomllib.load(f)
-
-        df_startup = startup()
-        df_climb = climb()
-        df_cruise = cruise()
-        df_loiter = loiter()
-        df_reserve = reserve()
-        df_shutdown = shutdown()
+        df_startup = startup(args)
+        df_climb = climb(args)
+        df_cruise = cruise(args)
+        df_loiter = loiter(args)
+        df_reserve = reserve(args)
+        df_shutdown = shutdown(args)
 
         df_dict = {
             "Startup, Taxi, Run-Up": df_startup,
