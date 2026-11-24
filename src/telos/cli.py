@@ -13,39 +13,29 @@ def startup(args: argparse.Namespace):
 
     case = {
         "airplanes": [
+            Path(r"D:\Users\jgros\Documents\Github\atlas\src\telos\data\airplanes\c150m.toml"),
             Path(r"D:\Users\jgros\Documents\GitHub\atlas\src\telos\data\airplanes\c152.toml"), 
             Path(r"D:\Users\jgros\Documents\GitHub\atlas\src\telos\data\airplanes\aa5a.toml"),
-            Path(r"D:\Users\jgros\Documents\GitHub\atlas\src\telos\data\airplanes\aa5b.toml")
+            Path(r"D:\Users\jgros\Documents\GitHub\atlas\src\telos\data\airplanes\aa5b.toml"),
         ]
     }
 
-    columns = [
-        "Airplane",
-        "Mission",
-        "Maximum BHP",
-        "Maximum RPM",
-        "Minimum RPM",
-        "BSFC",
-        "FF",
-        "Time",
-        "Fuel",
-        "Distance",
-    ]
-
-    units = {
+    header = {
         "Airplane": "None",
         "Mission": "None",
         "Maximum BHP": "bhp",
         "Maximum RPM": "rpm",
         "Minimum RPM": "rpm",
         "BSFC": "lb/hp-hr",
+        "%BHP": "percent",
         "FF": "gph",
+        "TAS": "knots",
         "Time": "hh:mm",
         "Fuel": "gal",
         "Distance": "nmi",
     }
 
-    rows = [units]
+    rows = [header]
 
     for i in case["airplanes"]:
 
@@ -57,15 +47,23 @@ def startup(args: argparse.Namespace):
         maximum_rpm = airplane["maximum_rpm"]["value"]
         minimum_rpm = airplane["minimum_rpm"]["value"]
         bsfc = airplane["bsfc"]["value"]
-        ff = bsfc * maximum_bhp * (minimum_rpm / maximum_rpm) * (1 / 6) # 1/6 converts PPH to GPH
+        percent_bhp = minimum_rpm / maximum_rpm
+
+        # Segment fuel flow and true airspeed
+        ff = bsfc * maximum_bhp * percent_bhp * (1 / 6) # 1/6 converts PPH to GPH
+        tas = 0
+
+        # Segment time, fuel, and distance
         time = dt.timedelta(hours=0, minutes=15)
         fuel = ff * (time.total_seconds() / 3600) # second term converts time to hours
-        dist = 0 # distance is inherently zero
+        dist = tas * (time.total_seconds() / 3600)
 
+        percent_bhp = round(percent_bhp*100, 0)
         ff = round(ff, 1)
         fuel = round(fuel, 1)
         dist = round(dist, 0)
 
+        # Organize the data
         data = {
             "Airplane": name,
             "Mission": "IYK-CHD (Std.)",
@@ -73,21 +71,79 @@ def startup(args: argparse.Namespace):
             "Maximum RPM": maximum_rpm,
             "Minimum RPM": minimum_rpm,
             "BSFC": bsfc,
+            "%BHP": percent_bhp,
             "FF": ff,
+            "TAS": tas,
             "Time": "00:15",
             "Fuel": fuel,
             "Distance": dist,
         }
 
+        # Append data to list of rows
         rows.append(data)
 
-    df = pd.DataFrame(rows, columns=columns)
+    # Create dataframe
+    df = pd.DataFrame(rows, columns=header.keys())
 
     return df
 
 def climb(args: argparse.Namespace):
 
-    df = pd.DataFrame()
+    case = {
+        "airplanes": [
+            Path(r"D:\Users\jgros\Documents\Github\atlas\src\telos\data\airplanes\c150m.toml"),
+            Path(r"D:\Users\jgros\Documents\GitHub\atlas\src\telos\data\airplanes\c152.toml"), 
+            Path(r"D:\Users\jgros\Documents\GitHub\atlas\src\telos\data\airplanes\aa5a.toml"),
+            Path(r"D:\Users\jgros\Documents\GitHub\atlas\src\telos\data\airplanes\aa5b.toml"),
+        ]
+    }
+
+    header = {
+        "Airplane": "None",
+        "Mission": "None",
+        "h_0": "ft",
+        "h_1": "ft",
+        "ROC_0": "ft/min",
+        "ROC_1": "ft/min",
+        "t_0": "hh:mm",
+        "t_1": "hh:mm",
+        "Maximum BHP": "bhp",
+        "BSFC": "lb/hp-hr",
+        "%BHP": "percent",
+        "FF": "gph",
+        "TAS": "knots",
+        "Time": "hh:mm",
+        "Fuel": "gal",
+        "Distance": "nmi",
+    }
+
+    rows = [header]
+
+    for i in case["airplanes"]:
+
+        with open(i, "rb") as f:
+            airplane = tomllib.load(f)
+
+        name = airplane["name"]
+
+        data = {
+            "Airplane": name,
+            "Mission": "IYK-CHD (Std.)",
+            "h_0": None,
+            "h_1": None,
+            "Maximum BHP": None,
+            "BSFC": None,
+            "%BHP": None,
+            "FF": None,
+            "TAS": None,
+            "Time": None,
+            "Fuel": None,
+            "Distance": None,
+        }
+
+        rows.append(data)
+
+    df = pd.DataFrame(rows, columns=header.keys())
 
     return df
 
@@ -114,6 +170,9 @@ def shutdown(args: argparse.Namespace):
     df = pd.DataFrame()
 
     return df
+
+def summary():
+    return None
 
 def main():
 
@@ -154,64 +213,3 @@ def main():
 
     finally:
         print("Complete!")
-
-    # # Iterate over airplanes in the case file.
-    # for i in case["airplanes"]:
-
-    #     toml_file = files("telos.data.airplanes").joinpath(i).with_suffix(".toml")
-
-    #     with toml_file.open("rb") as f:
-    #         data = tomllib.load(f)
-
-    #     print(data["name"])
-
-    #     # Weight & balance
-    #     bhp = data["brake_horsepower"]["value"]
-    #     gross_weight = data["maximum_gross_weight"]["value"]
-
-    #     # Takeoff distance
-
-    #     print(data["takeoff_ground_roll_distance"]["coefficients"])
-
-    #     # Climb
-    #     model = data["rate_of_climb"]["model"]
-    #     bsfc = 0.45 # 0.45 lb/bhp/hr per Raymer
-    #     percent_bhp = 1.00
-
-    #     df = pd.DataFrame()
-
-    #     df["density_altitude"] = h
-
-    #     for density_altitude in h:
-
-    #         x = pd.Series(
-    #             {
-    #                 "constant": 0,
-    #                 "gross_weight": gross_weight,
-    #                 "density_altitude": density_altitude,
-    #             }
-    #         )
-    #         b = pd.Series(data["rate_of_climb"]["coefficients"])
-
-    #         df["rate_of_climb"] = x @ b # equivalent to y = x*b^T + err
-
-    #         df["time_to_climb"] = (1/b["density_altitude"])*math.log10(df["rate_of_climb"] / (b["constant"] + b["gross_weight"]*x["gross_weight"]))
-
-    #         df["pph"] = bsfc*bhp*percent_bhp
-    #         df["ff"] = df["pph"] / 6
-    #         df["v"] = data["vy"]["value"]
-
-    #         df["fuel_to_climb"] = df["ff"] * df["time_to_climb"]
-
-    #         df["distance_to_climb"] = df["v"] * df["time_to_climb"]
-
-    #     plt.plot(df["fuel_to_climb"], df["density_altitude"])
-    #     plt.show()
-
-        
-
-        # Cruise speed
-
-        # Cruise range
-
-        # Landing distance
