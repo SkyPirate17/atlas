@@ -3,9 +3,21 @@ icao = "C150"
 seats = 2
 engine = "Continental O-200-A"
 
-[brake_horsepower]
+[maximum_bhp]
 value = 100
 units = "bhp"
+
+[maximum_rpm]
+value = 2750
+units = "rpm"
+
+[minimum_rpm]
+value = 1000
+units = "rpm"
+
+[bsfc]
+value = 0.45
+units = "lbs/hp-hr"
 
 [wing_area]
 value = 160
